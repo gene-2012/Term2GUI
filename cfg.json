@@ -1,0 +1,31 @@
+{
+	"title": "Compile CPP",
+	"exec": "g++",
+	"args": {
+		"source": {
+			"type": "fmtstr",
+			"format": "%s",
+            "prompt": "Source File"
+		},
+		"save": {
+			"type": "fmtstr",
+			"format": "-o %s",
+            "prompt": "Save As"
+		},
+		"std": {
+			"type": "fmtstr",
+			"format": "-std=c++%s",
+            "prompt": "CPP Standard"
+		},
+		"O2": {
+			"type": "str",
+			"value": "-O2",
+            "prompt": "O2"
+		},
+        "DisableANSI": {
+            "type": "bool",
+            "true": "-ansi",
+            "false": ""
+        }
+	}
+}
