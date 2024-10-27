@@ -151,38 +151,38 @@ In this part, we will create a configuration file for the `g++` compiler.
 Content of `g++.json`:
 ```json
 {
-	"title": "Compile CPP",
-	"version": 2, 
-	"exec": "g++",
-	"args": {
-		"source": {
-			"type": "fmtstr",
-			"format": "%s",
+    "title": "Compile CPP",
+    "version": 2, 
+    "exec": "g++",
+    "args": {
+        "source": {
+            "type": "fmtstr",
+            "format": "%s",
             "prompt": "Source File"
-		},
-		"save": {
-			"type": "fmtstr",
-			"format": "-o %s",
+        },
+        "save": {
+            "type": "fmtstr",
+            "format": "-o %s",
             "prompt": "Save As"
-		},
-		"std": {
-			"type": "choose",
-			"options":["14", "11", "98"],
-			"default":"11",
-			"format": "-std=c++%s",
+        },
+        "std": {
+            "type": "choose",
+            "options":["14", "11", "98"],
+            "default":"11",
+            "format": "-std=c++%s",
             "prompt": "CPP Standard"
-		},
-		"O2": {
-			"type": "str",
-			"value": "-O2",
+        },
+        "O2": {
+            "type": "str",
+            "value": "-O2",
             "prompt": "O2"
-		},
+        },
         "DisableANSI": {
             "type": "str",
             "value": "-ansi",
-			"prompt": "Disable ANSI"
+            "prompt": "Disable ANSI"
         }
-	}
+    }
 }
 ```
 
@@ -203,4 +203,4 @@ Command executed with exit code: 0
 
 You can find some examples in the `example` directory.
 
-More example can be found [here](https://github.com/gene-2012/T2G-library).
+More example can be found [here (gene-2012/T2G-library)](https://github.com/gene-2012/T2G-library).
