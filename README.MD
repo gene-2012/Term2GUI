@@ -70,10 +70,6 @@ python main.py your_config_filename
 > **Attention:**
 The `main.py` script will automatically detect the `cfg.json` file in the current directory. If you want to use a different configuration file, you need to specify the filename as an argument when running the script.
 
-## License
-
-This project is licensed under the MIT License.
-
 ## Contact
 
 For any questions or feedback, please contact me at:
@@ -81,3 +77,7 @@ For any questions or feedback, please contact me at:
 - **Github**: [@gene-2012](https://github.com/gene-2012).
 
 You can also issue a pull request or open an issue on the GitHub repository.
+
+## License
+
+This project is licensed under the GPL 3.0 License.
