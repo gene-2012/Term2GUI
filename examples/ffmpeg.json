@@ -1,0 +1,91 @@
+{
+    "title": "FFmpeg Command",
+    "exec": "ffmpeg",
+    "args": {
+        "input": {
+            "type": "fmtstr",
+            "format": "-i %s",
+            "prompt": "Input File"
+        },
+        "output": {
+            "type": "fmtstr",
+            "format": "%s",
+            "prompt": "Output File"
+        },
+        "video_codec": {
+            "type": "fmtstr",
+            "format": "-c:v %s",
+            "prompt": "Video Codec (e.g., libx264, copy)"
+        },
+        "audio_codec": {
+            "type": "fmtstr",
+            "format": "-c:a %s",
+            "prompt": "Audio Codec (e.g., aac, copy)"
+        },
+        "video_bitrate": {
+            "type": "fmtstr",
+            "format": "-b:v %s",
+            "prompt": "Video Bitrate (e.g., 1000k)"
+        },
+        "audio_bitrate": {
+            "type": "fmtstr",
+            "format": "-b:a %s",
+            "prompt": "Audio Bitrate (e.g., 128k)"
+        },
+        "resolution": {
+            "type": "fmtstr",
+            "format": "-s %s",
+            "prompt": "Resolution (e.g., 1920x1080)"
+        },
+        "frame_rate": {
+            "type": "fmtstr",
+            "format": "-r %s",
+            "prompt": "Frame Rate (e.g., 30)"
+        },
+        "start_time": {
+            "type": "fmtstr",
+            "format": "-ss %s",
+            "prompt": "Start Time (e.g., 00:00:10)"
+        },
+        "duration": {
+            "type": "fmtstr",
+            "format": "-t %s",
+            "prompt": "Duration (e.g., 00:01:00)"
+        },
+        "overwrite_output": {
+            "type": "bool",
+            "true": "-y",
+            "false": ""
+        },
+        "no_video": {
+            "type": "bool",
+            "true": "-vn",
+            "false": ""
+        },
+        "no_audio": {
+            "type": "bool",
+            "true": "-an",
+            "false": ""
+        },
+        "preset": {
+            "type": "fmtstr",
+            "format": "-preset %s",
+            "prompt": "Preset (e.g., ultrafast, fast, medium, slow, veryslow)"
+        },
+        "crf": {
+            "type": "fmtstr",
+            "format": "-crf %s",
+            "prompt": "Constant Rate Factor (e.g., 18)"
+        },
+        "threads": {
+            "type": "fmtstr",
+            "format": "-threads %s",
+            "prompt": "Number of Threads (e.g., 4)"
+        },
+        "loglevel": {
+            "type": "fmtstr",
+            "format": "-loglevel %s",
+            "prompt": "Log Level (e.g., quiet, panic, fatal, error, warning, info, verbose, debug, trace)"
+        }
+    }
+}
