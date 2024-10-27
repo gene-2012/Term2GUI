@@ -70,6 +70,19 @@ python main.py your_config_filename
 > **Attention:**
 The `main.py` script will automatically detect the `cfg.json` file in the current directory. If you want to use a different configuration file, you need to specify the filename as an argument when running the script.
 
+## Build Executable
+
+To build an executable file from the Python script, you can use tools like PyInstaller. Here's a basic example:
+
+```sh
+virtualenv venv
+. venv/Scripts/activate
+pip install pyinstaller
+pyinstaller -F main.py
+```
+
+This will create an executable file named `main.exe` in directory `./dist/`.
+
 ## Contact
 
 For any questions or feedback, please contact me at:

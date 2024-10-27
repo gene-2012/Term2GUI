@@ -4,3 +4,11 @@ __pycache__/
 
 # example-execution
 yt-dlp.exe
+
+# build
+build/
+dist/
+*.spec
+
+# virtual environment
+.venv/
