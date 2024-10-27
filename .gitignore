@@ -9,7 +9,6 @@ cfg.json
 # build
 build/
 dist/
-*.spec
 
 # virtual environment
 .venv/
