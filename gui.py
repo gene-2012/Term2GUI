@@ -15,73 +15,104 @@ class Application(tk.Tk):
         self.bool_vars = {}
         self.str_vars = {}
         self.create_widgets()
+        self.handle_version_mismatch()
 
     def create_widgets(self):
-        row = 0
-        num_rows = len(self.ef.arg_list) + 1
+        self.create_labels_and_inputs()
+        self.create_run_button()
+        self.create_result_text()
+        self.configure_grid_weights()
 
+    def create_labels_and_inputs(self):
+        row = 0
         for arg_name, arg_item in self.ef.arg_list.items():
             arg_type = arg_item.get('type', '')
             prompt = arg_item.get('prompt', arg_name)
             label = tk.Label(self, text=prompt + ":")
             label.grid(row=row, column=0, padx=10, pady=5, sticky='e')
 
-            if arg_type == 'bool':
-                var = tk.BooleanVar()
-                checkbutton = tk.Checkbutton(self, variable=var)
-                checkbutton.grid(row=row, column=1, padx=10, pady=5, sticky='w')
-                self.bool_vars[arg_name] = var
-            elif arg_type == 'str':
-                var = tk.BooleanVar()
-                checkbutton = tk.Checkbutton(self, variable=var)
-                checkbutton.grid(row=row, column=1, padx=10, pady=5, sticky='w')
-                self.bool_vars[arg_name] = var
-            elif arg_type in ['fmtstr', 'num']:
-                entry = tk.Entry(self)
-                entry.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
-                self.entries[arg_name] = entry
-            elif arg_type == 'file':
-                entry = tk.Entry(self)
-                entry.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
-                self.entries[arg_name] = entry
-                method = arg_item.get('method', 'open')
-                extensions = arg_item.get('extensions', [])
-                filetypes = [(f"{method.capitalize()} files", ' '.join(extensions)), ('All files', '*.*')]
-                if method == 'open':
-                    browse_button = tk.Button(self, text="Browse", command=lambda e=entry, ft=filetypes: self.open_file_dialog(e, ft))
-                elif method == 'save':
-                    browse_button = tk.Button(self, text="Browse", command=lambda e=entry, ft=filetypes: self.save_file_dialog(e, ft))
-                else:
-                    raise ValueError(f"Invalid method for file type: {method}")
-                browse_button.grid(row=row, column=2, padx=10, pady=5, sticky='w')
-            elif arg_type == 'path':
-                entry = tk.Entry(self)
-                entry.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
-                self.entries[arg_name] = entry
-                browse_button = tk.Button(self, text="Browse", command=lambda e=entry: self.open_directory_dialog(e))
-                browse_button.grid(row=row, column=2, padx=10, pady=5, sticky='w')
-            elif arg_type == 'choose':
-                options = arg_item.get('options', [])
-                var = tk.StringVar(value=arg_item.get('default', options[0]))
-                dropdown = tk.OptionMenu(self, var, *options)
-                dropdown.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
-                self.str_vars[arg_name] = var
-            else:
-                raise ValueError(f"Invalid argument type: {arg_type}")
+            self.create_input_widget(arg_name, arg_item, row)
 
             row += 1
 
-        # Run Button
+    def create_input_widget(self, arg_name, arg_item, row):
+        arg_type = arg_item.get('type', '')
+
+        if arg_type == 'bool':
+            self.create_bool_input(arg_name, row)
+        elif arg_type == 'str':
+            self.create_str_input(arg_name, row)
+        elif arg_type in ['fmtstr', 'num']:
+            self.create_entry_input(arg_name, row)
+        elif arg_type == 'file':
+            self.create_file_input(arg_name, arg_item, row)
+        elif arg_type == 'path':
+            self.create_path_input(arg_name, row)
+        elif arg_type == 'choose':
+            self.create_choose_input(arg_name, arg_item, row)
+        else:
+            raise ValueError(f"Invalid argument type: {arg_type}")
+
+    def create_bool_input(self, arg_name, row):
+        var = tk.BooleanVar()
+        checkbutton = tk.Checkbutton(self, variable=var)
+        checkbutton.grid(row=row, column=1, padx=10, pady=5, sticky='w')
+        self.bool_vars[arg_name] = var
+
+    def create_str_input(self, arg_name, row):
+        var = tk.BooleanVar()
+        checkbutton = tk.Checkbutton(self, variable=var)
+        checkbutton.grid(row=row, column=1, padx=10, pady=5, sticky='w')
+        self.bool_vars[arg_name] = var
+
+    def create_entry_input(self, arg_name, row):
+        entry = tk.Entry(self)
+        entry.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
+        self.entries[arg_name] = entry
+
+    def create_file_input(self, arg_name, arg_item, row):
+        entry = tk.Entry(self)
+        entry.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
+        self.entries[arg_name] = entry
+
+        method = arg_item.get('method', 'open')
+        extensions = arg_item.get('extensions', [])
+        filetypes = [(f"{method.capitalize()} files", ' '.join(extensions)), ('All files', '*.*')]
+        if method == 'open':
+            browse_button = tk.Button(self, text="Browse", command=lambda e=entry, ft=filetypes: self.open_file_dialog(e, ft))
+        elif method == 'save':
+            browse_button = tk.Button(self, text="Browse", command=lambda e=entry, ft=filetypes: self.save_file_dialog(e, ft))
+        else:
+            raise ValueError(f"Invalid method for file type: {method}")
+        browse_button.grid(row=row, column=2, padx=10, pady=5, sticky='w')
+
+    def create_path_input(self, arg_name, row):
+        entry = tk.Entry(self)
+        entry.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
+        self.entries[arg_name] = entry
+        browse_button = tk.Button(self, text="Browse", command=lambda e=entry: self.open_directory_dialog(e))
+        browse_button.grid(row=row, column=2, padx=10, pady=5, sticky='w')
+
+    def create_choose_input(self, arg_name, arg_item, row):
+        options = arg_item.get('options', [])
+        var = tk.StringVar(value=arg_item.get('default', options[0]))
+        dropdown = tk.OptionMenu(self, var, *options)
+        dropdown.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
+        self.str_vars[arg_name] = var
+
+    def create_run_button(self):
+        row = len(self.ef.arg_list)
         self.run_button = tk.Button(self, text="Run", command=self.run_command)
         self.run_button.grid(row=row, column=0, columnspan=2, padx=10, pady=10)
 
-        # Result Text
-        self.command_result = tk.Text(self, wrap=tk.WORD)  # Text Grid
+    def create_result_text(self):
+        num_rows = len(self.ef.arg_list) + 1
+        self.command_result = tk.Text(self, wrap=tk.WORD)
         self.command_result.grid(row=0, column=3, rowspan=num_rows + 1, padx=10, pady=5, sticky='nsew')
 
-        # Configure grid weights to make the right column expand
+    def configure_grid_weights(self):
         self.grid_columnconfigure(3, weight=1)
-        self.grid_rowconfigure(list(range(num_rows + 1)), weight=1)
+        self.grid_rowconfigure(list(range(len(self.ef.arg_list) + 1)), weight=1)
 
     def open_file_dialog(self, entry, filetypes):
         file_path = filedialog.askopenfilename(filetypes=filetypes)
@@ -165,5 +196,4 @@ class Application(tk.Tk):
 
 if __name__ == "__main__":
     app = Application('cfg.json')
-    app.handle_version_mismatch()
     app.mainloop()
