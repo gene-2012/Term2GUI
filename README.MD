@@ -7,7 +7,7 @@ Term2GUI is a graphical user interface (GUI) application designed to simplify th
 ## Features
 
 - **Dynamic UI Generation**: Automatically generates input fields based on the provided JSON configuration.
-- **Argument Types**: See in `ConfigurationGuide.md`.
+- **Argument Types**: See in [`ConfigurationGuide.md`](ConfigurationGuide.md).
 - **Real-time Command Preview**: Displays the constructed command before execution.
 - **Output Display**: Captures and displays the standard output and error of the executed command.
 
@@ -15,11 +15,23 @@ Term2GUI is a graphical user interface (GUI) application designed to simplify th
 
 To install and run Term2GUI, follow these steps:
 
+### Download
+
 **Clone the Repository**
 ```sh
 git clone https://github.com/gene-2012/Term2GUI.git
 cd Term2GUI
 ```
+or
+
+**Download Release(Windows Only)**
+
+[Download Here](https://github.com/gene-2012/Term2GUI/releases/latest/)
+
+
+### Build(Optional)
+
+Look at [here](#build-executable) for more details.
 
 ## Configuration
 

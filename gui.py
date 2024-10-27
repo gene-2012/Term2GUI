@@ -42,8 +42,10 @@ class Application(tk.Tk):
             self.create_bool_input(arg_name, row)
         elif arg_type == 'str':
             self.create_str_input(arg_name, row)
-        elif arg_type in ['fmtstr', 'num']:
+        elif arg_type == 'fmtstr':
             self.create_entry_input(arg_name, row)
+        elif arg_type == 'num':
+            self.create_int_input(arg_name, row)
         elif arg_type == 'file':
             self.create_file_input(arg_name, arg_item, row)
         elif arg_type == 'path':
@@ -64,6 +66,11 @@ class Application(tk.Tk):
         checkbutton = tk.Checkbutton(self, variable=var)
         checkbutton.grid(row=row, column=1, padx=10, pady=5, sticky='w')
         self.bool_vars[arg_name] = var
+
+    def create_int_input(self, arg_name, row):
+        entry = tk.Entry(self, validatecommand=lambda v: self.validate_int(v))
+        entry.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
+        self.entries[arg_name] = entry
 
     def create_entry_input(self, arg_name, row):
         entry = tk.Entry(self)
