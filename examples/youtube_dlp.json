@@ -1,5 +1,6 @@
 {
     "title": "Download Video",
+    "version": 1,
     "exec": "yt-dlp",
     "args": {
         "url": {

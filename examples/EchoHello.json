@@ -1,0 +1,12 @@
+{
+    "title": "Hello World",
+    "exec": "echo",
+    "version": 2,
+    "args": {
+        "message": {
+           "type": "fmtstr",
+           "format": "%s",
+           "prompt": "Message"
+        }
+    }
+}

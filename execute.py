@@ -1,22 +1,38 @@
 import json
+import warnings
 
 class ExecuteFile(object):
+    EF_VERSION = 2
+
     def __init__(self, config):
         try:
             with open(config, "r") as f:
                 self.config = json.load(f)
         except FileNotFoundError:
             raise FileNotFoundError(f"Can't find file {config}.")
-        
+
+        self.cfg_version = self.config.get('version', ExecuteFile.EF_VERSION)
         self.title = self.config.get('title', 'Untitled - Term2GUI V1.0')
         self.exe = self.config.get('exec', '')
         self.arg_list = self.config.get('args', {})
         self.supported = {
             'bool': self.add_bool_arg,
             'str': self.add_str_arg,
-            'fmtstr': self.add_formated_arg
+            'fmtstr': self.add_formated_arg,
+            'choose': self.add_choose_arg
         }
         self.args = [self.exe]
+
+        if self.cfg_version != ExecuteFile.EF_VERSION:
+            self.handle_version_mismatch()
+
+    def handle_version_mismatch(self):
+        warnings.warn(
+            f"ExecuteFile json version {self.cfg_version} does not match with current version {ExecuteFile.EF_VERSION}. "
+            f"Consider updating your configuration file.",
+            UserWarning
+        )
+        # Logging in Future
 
     def get_type(self, arg_name) -> str:
         return self.arg_list.get(arg_name, {}).get('type', '')
@@ -45,6 +61,7 @@ class ExecuteFile(object):
             self.args.append(arg_item['true'])
         elif not value and arg_item.get('false'):
             self.args.append(arg_item['false'])
+        self.outdated_args_type(arg_name)
 
     def add_str_arg(self, arg_name: str) -> None:
         """
@@ -57,6 +74,22 @@ class ExecuteFile(object):
         if arg_item.get('value'):
             self.args.append(arg_item['value'])
 
+    def add_choose_arg(self, arg_name: str, value: str) -> None:
+        """
+        json e.g.
+        {"arg_name" : {"type":"choose", "options":["a","b","c"], "default":"b"}}
+        """
+        arg_item = self.arg_list.get(arg_name, {})
+        if arg_item.get('type') != 'choose':
+            raise TypeError(f"Expected: choose, Find: {arg_item.get('type')}.")
+        options = arg_item.get('options', [])
+        default = arg_item.get('default', '')
+        format = arg_item.get('format', '%s')
+        if value not in options:
+            print(f"Invalid value: {value}, using default: {default}")
+            value = default
+        self.args.append(format % value)
+
     def add_formated_arg(self, arg_name: str, value) -> None:
         """
         json e.g.
@@ -67,18 +100,25 @@ class ExecuteFile(object):
         arg_item = self.arg_list.get(arg_name, {})
         if arg_item.get('type') != 'fmtstr':
             raise TypeError(f"Expected: fmtstr, Find: {arg_item.get('type')}.")
-        if arg_item.get('format'):
+        if arg_item.get('format', '%s'):
             self.args.append(arg_item['format'] % value)
+
+    def outdated_args_type(self, *args, **kwargs):
+        warnings.warn(
+            f"The argument type for {args} is outdated. Consider updating your configuration file.",
+            DeprecationWarning
+        )
+        # Logging in Future
 
     def __str__(self) -> str:
         return ' '.join(self.args)
 
 if __name__ == '__main__':
     try:
-        ef = ExecuteFile('cfg.json')
+        ef = ExecuteFile('examples/G++Basic.json')
         ef.add_formated_arg('source', input('Source File: '))
         ef.add_formated_arg('save', input('Save As: '))
-        ef.add_formated_arg('std', input('Standard (Leave Blank to Use C++11): '))
+        ef.add_choose_arg('std', int(input(f'Standard{ef.arg_list["std"]["options"]}(1-3): ')))
         if input('O2(y/n): ').lower() == 'y':
             ef.add_str_arg('O2')
         print(f'Running {ef} ...')

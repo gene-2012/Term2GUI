@@ -1,5 +1,6 @@
 {
 	"title": "Compile CPP",
+	"version": 2, 
 	"exec": "g++",
 	"args": {
 		"source": {
@@ -13,7 +14,9 @@
             "prompt": "Save As"
 		},
 		"std": {
-			"type": "fmtstr",
+			"type": "choose",
+			"options":["14", "11", "98"],
+			"default":"11",
 			"format": "-std=c++%s",
             "prompt": "CPP Standard"
 		},
@@ -23,9 +26,9 @@
             "prompt": "O2"
 		},
         "DisableANSI": {
-            "type": "bool",
-            "true": "-ansi",
-            "false": ""
+            "type": "str",
+            "value": "-ansi",
+			"prompt": "Disable ANSI"
         }
 	}
 }

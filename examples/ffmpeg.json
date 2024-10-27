@@ -1,5 +1,6 @@
 {
     "title": "FFmpeg Command",
+    "version": 1, 
     "exec": "ffmpeg",
     "args": {
         "input": {

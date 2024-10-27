@@ -2,14 +2,18 @@ import tkinter as tk
 from tkinter import messagebox
 import subprocess
 from execute import ExecuteFile
+import warnings
 
 class Application(tk.Tk):
+    APP_VERSION = 2
+
     def __init__(self, config_file):
         super().__init__()
         self.ef = ExecuteFile(config_file)
         self.title(self.ef.title)
         self.entries = {}
         self.bool_vars = {}
+        self.str_vars = {}
         self.create_widgets()
 
     def create_widgets(self):
@@ -36,6 +40,14 @@ class Application(tk.Tk):
                 checkbutton = tk.Checkbutton(self, variable=var)
                 checkbutton.grid(row=row, column=1, padx=10, pady=5, sticky='w')
                 self.bool_vars[arg_name] = var
+            elif arg_type == 'choose':
+                options = arg_item.get('options', [])
+                var = tk.StringVar(value=arg_item.get('default', options[0]))
+                dropdown = tk.OptionMenu(self, var, *options)
+                dropdown.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
+                self.str_vars[arg_name] = var
+            else:
+                raise ValueError(f"Invalid argument type: {arg_type}")
 
             row += 1
 
@@ -57,24 +69,30 @@ class Application(tk.Tk):
             for arg_name, arg_item in self.ef.arg_list.items():
                 arg_type = arg_item.get('type', '')
                 add_func = self.ef.supported.get(arg_type)
-                if arg_type == 'str':
-                    if self.bool_vars[arg_name].get():
-                        add_func(arg_name)
-                elif arg_type == 'fmtstr':
-                    value = self.entries[arg_name].get()
-                    add_func(arg_name, value)
-                elif arg_type == 'bool':
-                    value = self.bool_vars[arg_name].get()
-                    add_func(arg_name, value)
+                try:
+                    if arg_type == 'str':
+                        if self.bool_vars[arg_name].get():
+                            add_func(arg_name)
+                    elif arg_type == 'fmtstr':
+                        value = self.entries[arg_name].get()
+                        add_func(arg_name, value)
+                    elif arg_type == 'bool':
+                        value = self.bool_vars[arg_name].get()
+                        add_func(arg_name, value)
+                    elif arg_type == 'choose':
+                        value = self.str_vars[arg_name].get()
+                        add_func(arg_name, value)
+                except Warning as wr:
+                    messagebox.showwarning("Warning", f"A warning occurred: {wr}")
             command = str(self.ef)
-            print(f'Running {command} ...')
-
+            # print(f'Running {command} ...')
+            self.command_result.insert(tk.END, f"Running: {command}\n")
             # Run the command and capture the output
             process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             stdout, stderr = process.communicate()
 
             # Clear the Text widget and insert the output
-            # self.command_result.delete(1.0, tk.END)
+            # self.command_result.delete(1.0, tk.END)  # Discomment to clear previous output
             self.command_result.insert(tk.END, f"Command executed with exit code: {process.returncode}\n")
             if stdout:
                 self.command_result.insert(tk.END, "Standard Output:\n")
@@ -83,10 +101,32 @@ class Application(tk.Tk):
                 self.command_result.insert(tk.END, "\nStandard Error:\n")
                 self.command_result.insert(tk.END, stderr)
             self.command_result.insert(tk.END, f"\n{'-'*50}\n")
+            self.command_result.see(tk.END)
+        except Warning as wr:
+            messagebox.showwarning("Warning", f"A warning occurred: {wr}")
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {e}")
 
+    def handle_version_mismatch(self):
+        if self.ef.cfg_version != ExecuteFile.EF_VERSION:
+            warnings.warn(
+                f"ExecuteFile json version {self.ef.cfg_version} does not match with current version {ExecuteFile.EF_VERSION}. "
+                f"Consider updating your configuration file.",
+                UserWarning
+            )
+            messagebox.showwarning("Version Mismatch", 
+                                   f"ExecuteFile json version {self.ef.cfg_version} does not match with current version {ExecuteFile.EF_VERSION}. "
+                                   f"Consider updating your configuration file.")
+
+    def handle_outdated_args_type(self, *args, **kwargs):
+        warnings.warn(
+            f"The argument type for {args} is outdated. Consider updating your configuration file.",
+            DeprecationWarning
+        )
+        messagebox.showwarning("Outdated Argument Type", 
+                               f"The argument type for {args} is outdated. Consider updating your configuration file.")
 
 if __name__ == "__main__":
     app = Application('cfg.json')
+    app.handle_version_mismatch()
     app.mainloop()
