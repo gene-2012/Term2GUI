@@ -134,6 +134,32 @@ A single argument is defined as an object with the following properties:
         "prompt": "Prompt"
     }
     ```
+- **file**: A file selection argument. The body is the method to select the file. Also supported formatted string argument.
+    ```json
+    "arg5": {
+        "type": "file",
+        "method": "open",
+        "extensions": [".cpp", ".c"],
+        "format": "%s is selected",
+        "prompt": "Prompt"
+    }
+    ```
+- **dir**: A directory selection argument. Supported formatted string argument.
+    ```json
+    "arg6": {
+        "type": "path",
+        "format": "%s is selected",
+        "prompt": "Prompt"
+    }
+    ```
+- **num**: A number argument. Supported formatted string argument.
+    ```json
+    "arg7": {
+        "type": "num",
+        "format": "%d",
+        "prompt": "Prompt"
+    }
+    ```
 
 ## Try By Yourself - Build a JSON Configuration for G++
 
@@ -152,16 +178,20 @@ Content of `g++.json`:
 ```json
 {
     "title": "Compile CPP",
-    "version": 2, 
+    "version": 2,
     "exec": "g++",
     "args": {
         "source": {
-            "type": "fmtstr",
+            "type": "file",
+            "method": "open", 
             "format": "%s",
+            "extensions": [".cpp", ".c", ".h"],
             "prompt": "Source File"
         },
         "save": {
-            "type": "fmtstr",
+            "extensions": [".exe"],
+            "type": "file",
+            "method": "save",
             "format": "-o %s",
             "prompt": "Save As"
         },
@@ -193,7 +223,7 @@ python main.py g++.json
 
 The output should be like this:
 ```
-Running: g++ ../cpp/bit.cpp -o ../cpp/bit -std=c++11 -O2 -ansi
+Running: g++ [filename] -o [filename] -std=c++[std] [-O2] [-ansi]
 Command executed with exit code: 0
 
 --------------------------------------------------

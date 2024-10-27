@@ -83,6 +83,8 @@ class ExecuteFile(object):
         arg_item = self.arg_list.get(arg_name, {})
         if arg_item.get('type') != 'fmtstr':
             raise TypeError(f"Expected: fmtstr, Find: {arg_item.get('type')}.")
+        if not value: 
+            return
         if arg_item.get('format', '%s'):
             self.args.append(arg_item['format'] % value)
 
@@ -90,6 +92,8 @@ class ExecuteFile(object):
         arg_item = self.arg_list.get(arg_name, {})
         if arg_item.get('type') != 'file':
             raise TypeError(f"Expected: file, Find: {arg_item.get('type')}.")
+        if not value: 
+            return
         if arg_item.get('format', '%s'):
             self.args.append(arg_item['format'] % value)
 
@@ -97,6 +101,8 @@ class ExecuteFile(object):
         arg_item = self.arg_list.get(arg_name, {})
         if arg_item.get('type') != 'path':
             raise TypeError(f"Expected: path, Find: {arg_item.get('type')}.")
+        if not value: 
+            return
         if arg_item.get('format', '%s'):
             self.args.append(arg_item['format'] % value)
 
@@ -104,6 +110,8 @@ class ExecuteFile(object):
         arg_item = self.arg_list.get(arg_name, {})
         if arg_item.get('type') != 'num':
             raise TypeError(f"Expected: num, Find: {arg_item.get('type')}.")
+        if not value: 
+            return
         if arg_item.get('format', '%d'):
             self.args.append(arg_item['format'] % value)
 

@@ -6,6 +6,7 @@
         "source": {
             "type": "file",
             "method": "open", 
+            "format": "%s",
             "extensions": [".cpp", ".c", ".h"],
             "prompt": "Source File"
         },
@@ -23,15 +24,15 @@
             "format": "-std=c++%s",
             "prompt": "CPP Standard"
         },
-		"O2": {
-			"type": "str",
-			"value": "-O2",
+        "O2": {
+            "type": "str",
+            "value": "-O2",
             "prompt": "O2"
-		},
+        },
         "DisableANSI": {
             "type": "str",
             "value": "-ansi",
-			"prompt": "Disable ANSI"
+            "prompt": "Disable ANSI"
         }
     }
 }

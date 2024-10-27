@@ -1,6 +1,6 @@
 {
     "title": "Download Video",
-    "version": 1,
+    "version": 2,
     "exec": "yt-dlp",
     "args": {
         "url": {
@@ -9,19 +9,20 @@
             "prompt": "Video URL"
         },
         "output": {
-            "type": "fmtstr",
+            "type": "file",
+            "method": "save",
             "format": "-o %s",
             "prompt": "Output Filename"
         },
         "format": {
-            "type": "fmtstr",
+            "type": "choose",
+            "options": ["best", "worst", "mp4"],
             "format": "-f %s",
             "prompt": "Format (e.g., best, worst, mp4)"
         },
         "subtitles": {
-            "type": "bool",
-            "true": "--write-sub",
-            "false": ""
+            "type": "str",
+            "value": "--write-sub"
         },
         "cookies": {
             "type": "fmtstr",
@@ -34,14 +35,12 @@
             "prompt": "Proxy URL"
         },
         "quiet": {
-            "type": "bool",
-            "true": "--quiet",
-            "false": ""
+            "type": "str",
+            "value": "--quiet"
         },
         "verbose": {
-            "type": "bool",
-            "true": "--verbose",
-            "false": ""
+            "type": "str",
+            "value": "--verbose"
         }
     }
 }

@@ -7,7 +7,7 @@ Term2GUI is a graphical user interface (GUI) application designed to simplify th
 ## Features
 
 - **Dynamic UI Generation**: Automatically generates input fields based on the provided JSON configuration.
-- **Argument Types**: Supports `str`, `fmtstr`, and `bool` argument types.
+- **Argument Types**: See in `ConfigurationGuide.md`.
 - **Real-time Command Preview**: Displays the constructed command before execution.
 - **Output Display**: Captures and displays the standard output and error of the executed command.
 

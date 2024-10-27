@@ -31,7 +31,12 @@ class Application(tk.Tk):
                 checkbutton = tk.Checkbutton(self, variable=var)
                 checkbutton.grid(row=row, column=1, padx=10, pady=5, sticky='w')
                 self.bool_vars[arg_name] = var
-            elif arg_type in ['str', 'fmtstr', 'num']:
+            elif arg_type == 'str':
+                var = tk.BooleanVar()
+                checkbutton = tk.Checkbutton(self, variable=var)
+                checkbutton.grid(row=row, column=1, padx=10, pady=5, sticky='w')
+                self.bool_vars[arg_name] = var
+            elif arg_type in ['fmtstr', 'num']:
                 entry = tk.Entry(self)
                 entry.grid(row=row, column=1, padx=10, pady=5, sticky='ew')
                 self.entries[arg_name] = entry
@@ -106,7 +111,10 @@ class Application(tk.Tk):
                     if arg_type == 'bool':
                         value = self.bool_vars[arg_name].get()
                         add_func(arg_name, value)
-                    elif arg_type in ['str', 'fmtstr', 'file', 'path', 'num']:
+                    elif arg_type == 'str':
+                        value = self.bool_vars[arg_name].get()
+                        if value: add_func(arg_name)
+                    elif arg_type in ['fmtstr', 'file', 'path', 'num']:
                         value = self.entries[arg_name].get()
                         add_func(arg_name, value)
                     elif arg_type == 'choose':
