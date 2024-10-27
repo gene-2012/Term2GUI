@@ -1,25 +1,28 @@
 {
-	"title": "Compile CPP",
-	"version": 2, 
-	"exec": "g++",
-	"args": {
-		"source": {
-			"type": "fmtstr",
-			"format": "%s",
+    "title": "Compile CPP",
+    "version": 2,
+    "exec": "g++",
+    "args": {
+        "source": {
+            "type": "file",
+            "method": "open", 
+            "extensions": [".cpp", ".c", ".h"],
             "prompt": "Source File"
-		},
-		"save": {
-			"type": "fmtstr",
-			"format": "-o %s",
+        },
+        "save": {
+            "extensions": [".exe"],
+            "type": "file",
+            "method": "save",
+            "format": "-o %s",
             "prompt": "Save As"
-		},
-		"std": {
-			"type": "choose",
-			"options":["14", "11", "98"],
-			"default":"11",
-			"format": "-std=c++%s",
+        },
+        "std": {
+            "type": "choose",
+            "options":["14", "11", "98"],
+            "default":"11",
+            "format": "-std=c++%s",
             "prompt": "CPP Standard"
-		},
+        },
 		"O2": {
 			"type": "str",
 			"value": "-O2",
@@ -30,5 +33,5 @@
             "value": "-ansi",
 			"prompt": "Disable ANSI"
         }
-	}
+    }
 }

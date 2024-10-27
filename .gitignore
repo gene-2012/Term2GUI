@@ -4,6 +4,7 @@ __pycache__/
 
 # example-execution
 yt-dlp.exe
+cfg.json
 
 # build
 build/
